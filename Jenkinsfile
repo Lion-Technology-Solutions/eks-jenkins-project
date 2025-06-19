@@ -3,17 +3,17 @@ pipeline {
     
     environment {
         AWS_ACCOUNT_ID = '123456789012'
-        AWS_REGION = 'us-west-2'
-        ECR_REPOSITORY = 'my-app'
+        AWS_REGION = 'ca-central-1'
+        ECR_REPOSITORY = 'myapps'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        CLUSTER_NAME = 'my-eks-cluster'
+        CLUSTER_NAME = 'class30'
         KUBE_CONFIG = credentials('eks-kubeconfig')
     }
     
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-repo/your-app.git'
+                git 'https://github.com/Lion-Technology-Solutions/eks-jenkins-project.git'
             }
         }
         
@@ -28,7 +28,7 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 script {
-                    docker.withRegistry("https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com", 'ecr:us-west-2:aws-credentials') {
+                    docker.withRegistry("https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com", 'ecr:ca-central-1:aws-credentials') {
                         docker.image("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}").push()
                     }
                 }
